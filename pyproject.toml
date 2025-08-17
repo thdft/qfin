@@ -1,13 +1,23 @@
 [project]
 name = "qkit"
-version = "0.1.1"
-description = "Add your description here"
+version = "0.1.2"
+description = "Tools for quantitative financial"
 readme = "README.md"
-authors = [
-    { name = "thdft", email = "thdft@users.noreply.github.com" }
-]
+authors = [{ name = "thdft", email = "thdft@users.noreply.github.com" }]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["matplotlib>=3", "numpy>=2", "pandas>=2", "plotly>=6"]
+
+[project.urls]
+Homepage = "https://github.com/thdft/qkit.git"
+Repository = "https://github.com/thdft/qkit.git"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.30.1",
+    "ipywidgets>=8.1.7",
+    "nbformat>=5.10.4",
+    "ruff>=0.12.9",
+]
 
 [build-system]
 requires = ["uv_build>=0.8.10,<0.9.0"]

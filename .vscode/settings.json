@@ -1,0 +1,35 @@
+{
+  "editor.hover.delay": 6500,
+  "editor.quickSuggestionsDelay": 4000,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "search.useGlobalIgnoreFiles": true,
+  "search.exclude": {
+    ".venv": true
+  },
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "files.autoSave": "afterDelay",
+  "python.terminal.activateEnvironment": true,
+  "python.defaultInterpreterPath": "./.venv/bin/python",
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "notebook.formatOnSave.enabled": true,
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": "explicit",
+    "notebook.source.organizeImports": "explicit"
+  },
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "notebook.source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
+  },
+  "notebook.output.textLineLimit": 100,
+  "notebook.output.scrolling": false,
+  "files.autoSaveDelay": 4000,
+  "workbench.hover.delay": 2500,
+  "editor.hover.hidingDelay": 500
+}
