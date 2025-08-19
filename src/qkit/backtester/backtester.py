@@ -14,7 +14,8 @@ import pandas as pd
 class Trade:
     """Represents a trade with entry and exit prices."""
 
-    def __init__(self):
+    def __init__(self, state=None):
+        self.state: BrokerState = state
         self.is_long: bool = None
         self.entry_value: float = None
         self.entry_price: float = None
@@ -30,7 +31,7 @@ class Trade:
     @property
     def pl_value(self):
         """Trade profit (positive) or loss (negative) in cash units."""
-        price = self.exit_price
+        price = self.exit_price or self.state.last_price
 
         if self.is_long:
             perc = price / self.entry_price
@@ -42,7 +43,7 @@ class Trade:
     @property
     def pl_pct(self):
         """Trade profit (positive) or loss (negative) in percent."""
-        price = self.exit_price
+        price = self.exit_price or self.broker.last_price
         if self.is_long:
             perc = price / self.entry_price
         else:
@@ -108,14 +109,22 @@ class BrokerAccount:
         self.params: Params = params
         self.balance: float = params.initial_balance
         self.equity: float = params.initial_balance
+        self.hedging: bool = False  # opening multiple positions
+        self.netting: bool = True  # opening one position
         self.opened_trades: List[Trade] = []
         self.closed_trades: List[Trade] = []
         self.history_balance: np.ndarray = np.tile(params.initial_balance, len(params.dataset))
         self.history_equity: np.ndarray = np.tile(params.initial_balance, len(params.dataset))
         self.history_commission: np.ndarray = np.tile(0, len(params.dataset))
         self.commission_spent: float = 0
-        self.hedging: bool = False  # opening multiple positions
-        self.netting: bool = True  # opening one position
+
+    def refresh_values(self):
+        self.commission_spent = sum(trade.commissions for trade in self.opened_trades)
+        self.commission_spent += sum(trade.commissions for trade in self.closed_trades)
+        self.equity = round(self.balance + sum(trade.pl_value - trade.commissions for trade in self.opened_trades), 2)
+        self.history_balance[self.broker.state.current_bar] = self.balance
+        self.history_equity[self.broker.state.current_bar] = self.equity
+        self.history_commission[self.broker.state.current_bar] = round(self.commission_spent, 2)
 
     def __open(self, is_long: bool = False, value: float = None, price: float = None):
         """Open a new trade."""
@@ -138,7 +147,7 @@ class BrokerAccount:
             entry_value = min(self.params.default_entry_value, self.params.default_entry_value_max)
 
         # create a new trade and store it in the account
-        opened_trade = Trade()
+        opened_trade = Trade(self.broker.state)
         opened_trade.entry_commission = entry_value * self.params.commission
         opened_trade.entry_value = entry_value - opened_trade.entry_commission
         opened_trade.entry_price = price or self.broker.state.last_price
@@ -201,6 +210,10 @@ class Broker:
         self.state.data = self.params.dataset.iloc[_start:_end]
         self.state.is_last_bar = index + 1 == self.state.total_bar
         self.state.last_price = self.state.data.iloc[-1][self.params.close_column]  # fmt: off
+        self.refresh()
+
+    def refresh(self):
+        self.account_main.refresh_values()
 
     def buy(self):
         """Start buying."""
@@ -259,6 +272,40 @@ class Backtester:
             }
         )
 
+    def history(self) -> pd.DataFrame:
+        """Get the list of history."""
+        indexs = self.params.dataset.index
+        data = {
+            "close": self.params.dataset[self.params.close_column],
+            "balance": self.broker.account_main.history_balance,
+            "equity": self.broker.account_main.history_equity,
+            "commission": self.broker.account_main.history_commission,
+            "long": np.tile(False, len(indexs)),
+            "short": np.tile(False, len(indexs)),
+            "signal": np.tile(0, len(indexs)),
+        }
+
+        history = pd.DataFrame(data, index=indexs)
+
+        long_index = history.columns.get_loc("long")
+        short_index = history.columns.get_loc("short")
+        signal_index = history.columns.get_loc("signal")
+
+        for row in self.trades().itertuples():
+            if row.is_long:
+                history.iloc[row.entry_bar : row.exit_bar, long_index] = True
+                history.iloc[row.entry_bar : row.exit_bar, signal_index] = 1
+            else:
+                history.iloc[row.entry_bar : row.exit_bar, short_index] = True
+                history.iloc[row.entry_bar : row.exit_bar, signal_index] = -1
+
+        # -- buy and hold
+        balance_start = self.params.initial_balance
+        units = balance_start / history.iloc[0]["close"]
+        history["buy_hold"] = history["close"] * units
+
+        return history
+
     def run(self):
         """Run the backtesting process."""
         self.broker = Broker(self.params)
@@ -269,6 +316,8 @@ class Backtester:
             self.broker.set_next_bar(current)
             yield self.broker
             current += 1
+
+        self.broker.refresh()
 
 
 # Example usage:

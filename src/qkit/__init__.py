@@ -1,4 +1,4 @@
-from .backtester import Backtester
+from .backtester.backtester import Backtester
 
 
 def hello() -> str:
