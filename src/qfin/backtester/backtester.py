@@ -10,6 +10,8 @@ from typing import List
 import numpy as np
 import pandas as pd
 
+from .stats import stats
+
 
 class Trade:
     """Represents a trade with entry and exit prices."""
@@ -318,6 +320,9 @@ class Backtester:
             current += 1
 
         self.broker.refresh()
+
+    def stats(self):
+        return stats(self.history(), self.trades())
 
 
 # Example usage:
