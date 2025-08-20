@@ -3,12 +3,16 @@ Quantitative finance research tools in Python
 
 # Install
 
-`uv add git+https://github.com/thdft/qkit`
+`uv add git+https://github.com/thdft/qfin`
 
 # How to use 
 
 ```python 
-import qkit
+import qfin
 
-qkit.hello()
+qfin.hello()
 ```
+
+## License
+
+This project is licensed under the MIT License.

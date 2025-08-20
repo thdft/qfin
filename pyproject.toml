@@ -1,6 +1,6 @@
 [project]
-name = "qkit"
-version = "0.1.4"
+name = "qfin"
+version = "0.1.5"
 description = "Tools for quantitative financial"
 readme = "README.md"
 authors = [{ name = "thdft", email = "thdft@users.noreply.github.com" }]
@@ -8,8 +8,8 @@ requires-python = ">=3.11"
 dependencies = ["matplotlib>=3", "numpy>=2", "pandas>=2", "plotly>=6"]
 
 [project.urls]
-Homepage = "https://github.com/thdft/qkit.git"
-Repository = "https://github.com/thdft/qkit.git"
+Homepage = "https://github.com/thdft/qfin.git"
+Repository = "https://github.com/thdft/qfin.git"
 
 [dependency-groups]
 dev = [
