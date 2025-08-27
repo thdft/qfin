@@ -10,6 +10,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
+from .plot import plot_basic
 from .stats import stats
 
 
@@ -323,6 +324,9 @@ class Backtester:
 
     def stats(self):
         return stats(self.history(), self.trades())
+
+    def plot(self, w=1024, h=900, show_signals=False):
+        return plot_basic(history=self.history(), params=self.params, w=w, h=h, show_signals=show_signals)
 
 
 # Example usage:
