@@ -322,6 +322,11 @@ class Backtester:
 
         self.broker.refresh()
 
+        should_exit_on_last_bar = True
+        if should_exit_on_last_bar:
+            self.broker.close()
+            self.broker.refresh()
+
     def stats(self):
         return stats(self.history(), self.trades())
 
