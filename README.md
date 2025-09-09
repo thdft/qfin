@@ -7,6 +7,24 @@ Quantitative finance research tools in Python
 
 # How to use 
 
+### API 
+
+```python 
+
+# yahoo
+from qfin.api.yahoo import yahoo
+yahoo(ticker="^SPX", start="2025-01-01", interval="1d")
+
+# tradingview
+from qfin.api.tv import Interval, TvDatafeed
+tv = TvDatafeed()
+tv.get_hist(symbol="SPX", exchange="SP", interval=Interval.in_daily, n_bars=260)
+
+# fred
+from qfin.api.fred import fred
+fred("M2SL")
+```
+
 ### Backtest Engine
 
 ```python 
