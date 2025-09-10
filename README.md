@@ -3,7 +3,13 @@ Quantitative finance research tools in Python
 
 # Install
 
-`uv add git+https://github.com/thdft/qfin`
+```bash
+# install 
+uv add git+https://github.com/thdft/qfin
+
+# upgrade
+uv add git+https://github.com/thdft/qfin --upgrade-package qfin 
+```
 
 # How to use 
 
@@ -21,8 +27,8 @@ tv = TvDatafeed()
 tv.get_hist(symbol="SPX", exchange="SP", interval=Interval.in_daily, n_bars=260)
 
 # bybit
-# env: BYBIT_API_KEY=<your-api-key>
-# env: BYBIT_API_SECRET=<your-api-secret>
+# .env: BYBIT_API_KEY=<your-api-key>
+# .env: BYBIT_API_SECRET=<your-api-secret>
 from qfin.api.bybit import bybit
 bybit(ticker="BTCUSD", start="2014-01-01", end=None, interval="d")
 
