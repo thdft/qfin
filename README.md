@@ -20,6 +20,12 @@ from qfin.api.tv import Interval, TvDatafeed
 tv = TvDatafeed()
 tv.get_hist(symbol="SPX", exchange="SP", interval=Interval.in_daily, n_bars=260)
 
+# bybit
+# env: BYBIT_API_KEY=<your-api-key>
+# env: BYBIT_API_SECRET=<your-api-secret>
+from qfin.api.bybit import bybit
+bybit(ticker="BTCUSD", start="2014-01-01", end=None, interval="d")
+
 # fred
 from qfin.api.fred import fred
 fred("M2SL")
@@ -67,7 +73,7 @@ for broker in bt.run():
             broker.close()
 ```
 
-### Backtest Result
+#### Backtest Result
 
 ```python
 # ---- print statistics ------------

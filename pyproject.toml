@@ -1,6 +1,6 @@
 [project]
 name = "qfin"
-version = "0.1.9"
+version = "0.1.10"
 description = "Tools for quantitative financial"
 readme = "README.md"
 authors = [{ name = "thdft", email = "thdft@users.noreply.github.com" }]
@@ -10,6 +10,7 @@ dependencies = [
     "numpy>=2",
     "pandas>=2",
     "plotly>=6",
+    "pybit>=5.11.0",
     "websocket-client>=1.8.0",
     "yfinance>=0.2.65",
 ]
