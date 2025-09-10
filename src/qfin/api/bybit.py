@@ -96,7 +96,7 @@ def bybit(ticker, start=None, end=None, interval=240, limit=1000, sleep_time=1.5
             arr.append(result)
 
             if verbose:
-                print("   first:", result.iloc[0].name, "last:", result.iloc[-1].name, "total:", len(result))
+                print("   start:", result.iloc[0].name, "end:", result.iloc[-1].name, "total:", len(result))
 
             next_start = result.iloc[-1].name
             next_start = next_start - timedelta(days=1)
@@ -117,7 +117,7 @@ def bybit(ticker, start=None, end=None, interval=240, limit=1000, sleep_time=1.5
             arr.append(result)
 
             if verbose:
-                print("   first:", result.iloc[0].name, "last:", result.iloc[-1].name, "total:", len(result), "diff:", result.iloc[-1].name - result.iloc[0].name)  # fmt: off
+                print("   start:", result.iloc[0].name, "end:", result.iloc[-1].name, "total:", len(result), "diff:", result.iloc[-1].name - result.iloc[0].name)  # fmt: off
 
             next_end = result.iloc[0].name
             next_end = next_end + timedelta(days=1)
