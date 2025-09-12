@@ -97,6 +97,13 @@ Instead of creating a new strategy each time, you can reuse certain predefined s
 from qfin.backtester.runners import bt_signal_change
 
 df = pd.read_csv("./my_table_above.csv", index_col=0, parse_dates=[0], sep=",")
+
+backtest_params = {
+    "initial_balance": 10000,
+    "default_entry_value": 0.9,
+    "default_entry_value_max": 20000,
+}
+
 bt = bt_signal_change(dataset=df, **backtest_params)
 
 # print statistics
