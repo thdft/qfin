@@ -55,26 +55,27 @@ def revert_echo(dataserie, empty_value=None):
 # ----------------
 
 
-def crossover(dataserie_a, dataserie_b=None, shift=1, echo=False, nosignal_value=0):
+def crossover(dataserie_a, dataserie_b=None, echo=False, nosignal_value=0):
     """whether a variable series crossed over another series"""
 
     col = "cross"
     df = dataserie_a.to_frame().copy()
     df["a"] = dataserie_a
-    df["b"] = df["a"].copy().shift(1) if dataserie_b is None else dataserie_b
+    df["b"] = df["a"].shift(1) if dataserie_b is None else dataserie_b
     df[col] = np.select(
         [
             np.isnan(df["a"]),
             np.isnan(df["b"]),
-            (df["a"] > df["b"]) & (df["a"].shift(shift) < df["b"].shift(shift)),
-            (df["a"] < df["b"]) & (df["a"].shift(shift) > df["b"].shift(shift)),
+            df["a"] > df["b"],
+            df["a"] < df["b"],
+            df["a"] == df["b"],
         ],
-        [nosignal_value, nosignal_value, 1, -1],
+        [nosignal_value, nosignal_value, 1, -1, nosignal_value],
         nosignal_value,
     )
 
-    if echo:
-        df[col] = continue_echo(df[col], initial_value=0, skip_values=[nosignal_value])
+    if not echo:
+        df[col] = revert_echo(df[col], empty_value=nosignal_value)
 
     return df[col]
 
