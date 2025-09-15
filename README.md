@@ -55,8 +55,9 @@ df = pd.read_csv("./my_table_above.csv", index_col=0, parse_dates=[0], sep=",")
 
 backtest_params = {
     "initial_balance": 10000,
-    "default_entry_value": 0.9, # 90%
+    "default_entry_value": 1, # 100% (that will be $10000 per trade)
     "default_entry_value_max": 20000, # but max $20000
+    "commission": 0.001,
 }
 
 bt = qfin.Backtester(dataset=df, **backtest_params)
@@ -100,8 +101,9 @@ df = pd.read_csv("./my_table_above.csv", index_col=0, parse_dates=[0], sep=",")
 
 backtest_params = {
     "initial_balance": 10000,
-    "default_entry_value": 0.9,
+    "default_entry_value": 1,
     "default_entry_value_max": 20000,
+    "commission": 0.001,
 }
 
 bt = bt_signal_change(dataset=df, **backtest_params)

@@ -242,7 +242,7 @@ class Backtester:
         self,
         dataset: pd.DataFrame,
         initial_balance: float = 10000.0,
-        commission: float = 0.01,
+        commission: float = 0.001,
         default_entry_value: float = 1,  # between 0.01 and 1 (percent)
         default_entry_value_max: float = 20000,
     ) -> None:
