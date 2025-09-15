@@ -74,6 +74,7 @@ def stats(history, trades, risk_free_rate=5):
     s.loc["Balance Peak"] = balance.max()
     s.loc["Balance Final"] = balance.iloc[-1]
     s.loc["Balance Return [%]"] = (balance.iloc[-1] - balance.iloc[0]) / balance.iloc[0] * 100
+    s.loc["Gross Return [%]"] = round(trades["return_pct"].sum() * 100, 2)  # it is 'balance return' but without the commissions
     s.loc["Total Commissions"] = history.iloc[-1]["commission"]
 
     dd = 1 - equity / np.maximum.accumulate(equity)
