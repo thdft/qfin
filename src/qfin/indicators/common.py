@@ -51,6 +51,15 @@ def revert_echo(dataserie, empty_value=None):
 
 
 # ----------------
+#  direction
+# ----------------
+
+
+def direction(dataserie_a, dataserie_b=None, echo=True):
+    return crossover(dataserie_a, dataserie_b, echo=echo, nosignal_value=0)
+
+
+# ----------------
 #  crossover
 # ----------------
 
