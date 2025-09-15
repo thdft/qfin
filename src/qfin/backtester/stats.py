@@ -89,13 +89,7 @@ def stats(history, trades, risk_free_rate=5):
         freq_days = cast(pd.Timedelta, _data_period(indexs)).days
         have_weekends = indexs.dayofweek.to_series().between(5, 6).mean() > 2 / 7 * 0.6
         annual_trading_days = (
-            52
-            if freq_days == 7
-            else 12
-            if freq_days == 31
-            else 1
-            if freq_days == 365
-            else (365 if have_weekends else 252)
+            52 if freq_days == 7 else 12 if freq_days == 31 else 1 if freq_days == 365 else (365 if have_weekends else 252)
         )
         freq = {7: "W", 31: "ME", 365: "YE"}.get(freq_days, "D")
         day_returns = equity.resample(freq).last().dropna().pct_change()
@@ -125,9 +119,7 @@ def stats(history, trades, risk_free_rate=5):
     # Our Sharpe mismatches `empyrical.sharpe_ratio()` because they use arithmetic mean return
     # and simple standard deviation
 
-    s.loc["Sharpe Ratio"] = (s.loc["Return (Ann.) [%]"] - risk_free_rate * 100) / (
-        s.loc["Volatility (Ann.) [%]"] or np.nan
-    )  # noqa: E501
+    s.loc["Sharpe Ratio"] = (s.loc["Return (Ann.) [%]"] - risk_free_rate * 100) / (s.loc["Volatility (Ann.) [%]"] or np.nan)  # noqa: E501
     # Our Sortino mismatches `empyrical.sortino_ratio()` because they use arithmetic mean return
     with np.errstate(divide="ignore"):
         s.loc["Sortino Ratio"] = (annualized_return - risk_free_rate) / (
