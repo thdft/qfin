@@ -88,6 +88,7 @@ print(bt.stats())
 
 # ---- plot result ------------
 bt.plot()
+bt.thumbnail()
 ```
 
 #### Predefined Backtest Runners

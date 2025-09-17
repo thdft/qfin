@@ -1,5 +1,6 @@
 import datetime as datetime
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
@@ -9,7 +10,7 @@ from plotly.subplots import make_subplots
 def plot_basic(
     history: pd.DataFrame,
     params: dict,
-    title: str = "Backtest",
+    title: str = "",
     w: int = 1024,
     h: int = 900,
     show_signals: bool = False,
@@ -90,3 +91,44 @@ def plot_basic(
 
     # show the plot
     fig.show()
+
+
+def plot_thumbnail(
+    history: pd.DataFrame,
+    params: dict,
+    stats: dict,
+    title: str = "Backtest",
+    w: int = 4,
+    h: int = 1,
+):
+    _s = "&#36;"
+    hdf = history
+
+    # calculate balance final percentage and string representation
+    balance_start = params.initial_balance
+    balance_end = hdf.iloc[-1]["balance"]
+    balance_final_str = str(f"{_s}{hdf.iloc[-1]['balance']:,.2f}")
+    balance_final_perc = round(((balance_end / balance_start) - 1) * 100, 2)
+
+    color = "green" if balance_final_perc > 0 else "red"
+
+    text = f"{balance_final_perc}%"
+    text2 = ""
+
+    if title:
+        text = f"{title} {text}"
+
+    plt.figure(figsize=(w, h))
+    plt.plot(hdf.index, hdf["balance"], color=color)
+
+    if isinstance(stats, pd.Series):
+        max_drawdown = round(stats["Max. Drawdown [%]"], 2)
+        avg_drawdown = round(stats["Avg. Drawdown [%]"], 2)
+        text2 = text2 + f"\n{max_drawdown}%\n(avg:{avg_drawdown})"
+        # plt.annotate(f"{max_drawdown}%", xy=(1, 1), xycoords="axes fraction")
+
+    plt.annotate(text, xy=(0, 1), xycoords="axes fraction", size=10)
+    plt.annotate(text2, xy=(0, 0.5), xycoords="axes fraction", color="grey", size=8)
+
+    plt.axis("off")
+    plt.show()
