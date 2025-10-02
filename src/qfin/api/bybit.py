@@ -16,14 +16,14 @@ def to_timestamp_ms(value: str, is_end_time=False) -> int:
     return int(dt.timestamp()) * 1000
 
 
-def pybit(ticker, start=None, end=None, interval=720, limit=1000):
+def pybit(ticker, start=None, end=None, interval=720, limit=1000, BYBIT_API_KEY=None, BYBIT_API_SECRET=None):
     """helper function
     doc: https://bybit-exchange.github.io/docs/v5/market/kline
     interval: 1,3,5,15,30,60,120,240,360,720,D,W,M
     """
     symbol = ticker.replace("-", "").replace("/", "")
-    BYBIT_API_KEY = os.environ["BYBIT_API_KEY"]
-    BYBIT_API_SECRET = os.environ["BYBIT_API_SECRET"]
+    BYBIT_API_KEY = BYBIT_API_KEY or os.environ["BYBIT_API_KEY"]
+    BYBIT_API_SECRET = BYBIT_API_SECRET or os.environ["BYBIT_API_SECRET"]
     session = HTTP(testnet=False, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
 
     kLineIntervalDict = {
@@ -67,7 +67,17 @@ def pybit(ticker, start=None, end=None, interval=720, limit=1000):
     return pybit_df
 
 
-def bybit(ticker, start=None, end=None, interval=240, limit=1000, sleep_time=1.5, verbose=False):
+def bybit(
+    ticker,
+    start=None,
+    end=None,
+    interval=240,
+    limit=1000,
+    sleep_time=1.5,
+    verbose=False,
+    BYBIT_API_KEY=None,
+    BYBIT_API_SECRET=None,
+):
     arr = []
 
     i = 0
@@ -92,7 +102,7 @@ def bybit(ticker, start=None, end=None, interval=240, limit=1000, sleep_time=1.5
             if verbose:
                 print(f"[running.{i}]", _start, "to", _end)
 
-            result = pybit(ticker, _start, _end, interval, limit)
+            result = pybit(ticker, _start, _end, interval, limit, BYBIT_API_KEY=BYBIT_API_KEY, BYBIT_API_SECRET=BYBIT_API_SECRET)
             arr.append(result)
 
             if verbose:
@@ -113,7 +123,7 @@ def bybit(ticker, start=None, end=None, interval=240, limit=1000, sleep_time=1.5
             if verbose:
                 print(f"[running.{i}]", _start, "to", _end)
 
-            result = pybit(ticker, _start, _end, interval, limit)
+            result = pybit(ticker, _start, _end, interval, limit, BYBIT_API_KEY=BYBIT_API_KEY, BYBIT_API_SECRET=BYBIT_API_SECRET)
             arr.append(result)
 
             if verbose:
