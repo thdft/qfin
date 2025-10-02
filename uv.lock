@@ -1248,7 +1248,7 @@ wheels = [
 
 [[package]]
 name = "qfin"
-version = "0.1.9"
+version = "0.1.15"
 source = { editable = "." }
 dependencies = [
     { name = "matplotlib" },
